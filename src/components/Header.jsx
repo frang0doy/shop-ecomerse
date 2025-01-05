@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { ShoppingCartIcon, Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { useLanguage } from './LenguajeContext';
 
-export default function Header({ setSearchTerm }) {
+export default function Header() {
   const [scrolling, setScrolling] = useState(0);
   const [bgColor, setBgColor] = useState('transparent');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -13,12 +13,7 @@ export default function Header({ setSearchTerm }) {
       const scrollPosition = window.scrollY;
       const opacity = Math.min(scrollPosition / 300, 1);
       setScrolling(opacity);
-
-      if (scrollPosition > window.innerHeight * 0.6) {  
-        setBgColor('bg-black');
-      } else {
-        setBgColor('transparent');
-      }
+      setBgColor(scrollPosition > window.innerHeight * 0.6 ? 'bg-black' : 'transparent');
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -46,12 +41,20 @@ export default function Header({ setSearchTerm }) {
 
         {/* Íconos de carrito y cambio de idioma a la derecha */}
         <div className="flex items-center space-x-4">
-          <ShoppingCartIcon className="h-6 w-6 text-white cursor-pointer hover:text-indigo-600 transition-all" />
+          {/* Ícono del carrito */}
+          <div className="relative">
+            <ShoppingCartIcon
+              className="h-6 w-6 text-white cursor-pointer hover:text-indigo-600 transition-all"
+              aria-label="Ir al carrito"
+            />
+          </div>
+
+          {/* Botón de cambio de idioma */}
           <button
             onClick={toggleLanguage}
             className="text-white text-sm font-semibold py-2 px-4 cursor-pointer hover:text-indigo-600 transition-all"
           >
-            {language === 'es' ? 'IN' : 'ES'}
+            {language === 'es' ? 'EN' : 'ES'}
           </button>
         </div>
 
@@ -84,12 +87,20 @@ export default function Header({ setSearchTerm }) {
 
                 <div className="flex flex-col items-center justify-end mt-auto space-y-4">
                   <div className="flex items-center justify-center space-x-4">
-                    <ShoppingCartIcon className="h-6 w-6 text-white cursor-pointer hover:text-indigo-600 transition-all" />
+                    {/* Ícono del carrito en el menú móvil */}
+                    <div className="relative">
+                      <ShoppingCartIcon
+                        className="h-6 w-6 text-white cursor-pointer hover:text-indigo-600 transition-all"
+                        aria-label="Ir al carrito"
+                      />
+                    </div>
+
+                    {/* Botón de cambio de idioma */}
                     <button
                       onClick={toggleLanguage}
                       className="text-white text-sm font-semibold py-2 px-4 cursor-pointer hover:text-indigo-600 transition-all"
                     >
-                      {language === 'es' ? 'IN' : 'ES'}
+                      {language === 'es' ? 'EN' : 'ES'}
                     </button>
                   </div>
                 </div>
