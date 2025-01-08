@@ -5,43 +5,38 @@ import Footer from './components/Footer';
 import HeroSection from './components/Herosection';
 import Productos from './components/Productos';
 import { LenguajeProvider } from './components/LenguajeContext';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Cart from './components/Cart'; // Nuevo componente para el carrito
-import { CarritoProvider } from './components/CarritoContext'; // Ajusta la ruta a 'components'
- // Importamos el CarritoProvider
+import { BrowserRouter as Router, Routes } from 'react-router-dom';
 
 function App() {
   const [searchTerm, setSearchTerm] = useState(""); // Estado para el término de búsqueda
 
   return (
     <LenguajeProvider>
-      <CarritoProvider> {/* Envuelve con el CarritoProvider */}
-        <Router>
-          <div className="App flex flex-col min-h-screen">
-            <header className="App-header">
-              <Header setSearchTerm={setSearchTerm} />
-            </header>
+      <Router>
+        <div className="App flex flex-col min-h-screen">
+          <header className="App-header">
+            <Header setSearchTerm={setSearchTerm} />
+          </header>
 
-            <HeroSection />
+          <HeroSection />
 
-            <main className="flex-grow">
-              <section id="productos">
-                <Productos
-                  searchTerm={searchTerm}
-                  setSearchTerm={setSearchTerm}
-                />
-              </section>
+          <main className="flex-grow">
+            <section id="productos">
+              <Productos
+                searchTerm={searchTerm}
+                setSearchTerm={setSearchTerm}
+              />
+            </section>
 
-              {/* Rutas de la aplicación */}
-              <Routes>
-                <Route path="/cart" element={<Cart />} />
-              </Routes>
-            </main>
+            {/* Aquí puedes agregar más rutas si es necesario */}
+            <Routes>
+              {/* Por ahora, sin rutas adicionales */}
+            </Routes>
+          </main>
 
-            <Footer />
-          </div>
-        </Router>
-      </CarritoProvider>
+          <Footer />
+        </div>
+      </Router>
     </LenguajeProvider>
   );
 }

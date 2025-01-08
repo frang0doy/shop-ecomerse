@@ -1,8 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { ShoppingCartIcon, Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
-import { CheckIcon } from '@heroicons/react/24/solid';
-import { useCarrito } from "./CarritoContext"; // Contexto del carrito
-import CartModal from "./CartModal"; // Modal del carrito
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useLanguage } from './LenguajeContext'; // Importa el hook para manejar el lenguaje
 
 // Componente de alerta
@@ -25,7 +22,6 @@ function Alerta({ mensaje, onClose }) {
 
   return (
     <div className="fixed top-0 left-1/2 transform -translate-x-1/2 z-50 w-96 p-4 bg-green-500 text-white rounded-lg shadow-lg flex items-center justify-between space-x-4">
-      <CheckIcon className="h-6 w-6 text-white" />
       <span className="flex-1 text-center">{mensaje}</span>
       <button onClick={() => setVisible(false)} className="text-white">
         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -40,9 +36,6 @@ export default function Header() {
   const [scrolling, setScrolling] = useState(0);
   const [bgColor, setBgColor] = useState("transparent");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [isCartOpen, setIsCartOpen] = useState(false); // Nuevo estado para el modal del carrito
-  const [mensaje, setMensaje] = useState(null); // Estado para controlar el mensaje de la alerta
-  const { carrito, agregarProducto } = useCarrito(); // Productos en el carrito desde el contexto
   const { language, toggleLanguage } = useLanguage(); // Usa el contexto de lenguaje
 
   useEffect(() => {
@@ -60,13 +53,6 @@ export default function Header() {
     };
   }, []);
 
-  const totalItems = carrito.reduce((acc, item) => acc + item.cantidad, 0); // Cantidad total de productos
-
-  const manejarAgregarAlCarrito = (producto) => {
-    agregarProducto(producto); // Llama a la función que agrega el producto al carrito
-    setMensaje('Producto agregado al carrito'); // Muestra el mensaje en la alerta
-  };
-
   return (
     <header
       className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ease-in-out ${bgColor}`}
@@ -75,7 +61,8 @@ export default function Header() {
       }}
     >
       {/* Alerta */}
-      <Alerta mensaje={mensaje} onClose={() => setMensaje(null)} />
+      {/* Puedes usar la alerta aquí si es necesario */}
+      {/* <Alerta mensaje={mensaje} onClose={() => setMensaje(null)} /> */}
 
       <nav className="mx-auto flex items-center justify-between p-6 lg:px-8">
         {/* Logo */}
@@ -86,31 +73,13 @@ export default function Header() {
           </a>
         </div>
 
-        {/* Íconos */}
-        <div className="flex items-center space-x-4">
-          {/* Ícono del carrito */}
-          <div className="relative">
-            <button
-              onClick={() => setIsCartOpen(true)} // Abrir el modal del carrito
-              className="relative p-2 text-white hover:text-indigo-600 transition-all"
-            >
-              <ShoppingCartIcon className="h-6 w-6" aria-label="Ir al carrito" />
-              {totalItems > 0 && (
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
-                  {totalItems}
-                </span>
-              )}
-            </button>
-          </div>
-
-          {/* Botón de cambio de idioma */}
-          <button
-            onClick={toggleLanguage}
-            className="text-white text-sm font-semibold py-2 px-4 cursor-pointer hover:text-indigo-600 transition-all"
-          >
-            {language === "es" ? "EN" : "ES"}
-          </button>
-        </div>
+        {/* Botón de cambio de idioma */}
+        <button
+          onClick={toggleLanguage}
+          className="text-white text-sm font-semibold py-2 px-4 cursor-pointer hover:text-indigo-600 transition-all"
+        >
+          {language === "es" ? "EN" : "ES"}
+        </button>
 
         {/* Menú móvil */}
         <div className="lg:hidden">
@@ -145,9 +114,6 @@ export default function Header() {
           )}
         </div>
       </nav>
-
-      {/* Modal del carrito */}
-      {isCartOpen && <CartModal onClose={() => setIsCartOpen(false)} />}
     </header>
   );
 }
