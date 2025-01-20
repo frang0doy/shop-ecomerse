@@ -6,20 +6,20 @@ import HeroSection from './components/Herosection';
 import Productos from './components/Productos';
 import Sidebar from './components/Sidebar';
 import { LenguajeProvider } from './components/LenguajeContext';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'; // Asegúrate de importar Route
-import Checkout from './components/Checkout'; // Asegúrate de importar Checkout correctamente
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+
+import CheckoutModal from './components/CheckoutModal'; // Modal
 
 function App() {
   const [searchTerm, setSearchTerm] = useState(""); // Estado para el término de búsqueda
   const [cart, setCart] = useState([]); // Estado para el carrito
   const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Estado para mostrar/ocultar la barra lateral
+  const [isCheckoutOpen, setCheckoutOpen] = useState(false); // Estado para mostrar/ocultar el modal de checkout
 
-  // Función para agregar productos al carrito
   const addToCart = (product) => {
     setCart((prevCart) => {
       const existingProduct = prevCart.find((item) => item.id === product.id);
       if (existingProduct) {
-        // Si el producto ya está, incrementa la cantidad
         return prevCart.map((item) =>
           item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
         );
@@ -28,19 +28,16 @@ function App() {
     });
   };
 
-  // Función para eliminar productos del carrito por cantidad
   const removeFromCart = (product) => {
     setCart((prevCart) => {
       const existingProduct = prevCart.find((item) => item.id === product.id);
       if (existingProduct.quantity > 1) {
-        // Reducir la cantidad en 1
         return prevCart.map((item) =>
           item.id === product.id
             ? { ...item, quantity: item.quantity - 1 }
             : item
         );
       }
-      // Si la cantidad es 1, eliminar el producto
       return prevCart.filter((item) => item.id !== product.id);
     });
   };
@@ -60,25 +57,32 @@ function App() {
               <Productos
                 searchTerm={searchTerm}
                 setSearchTerm={setSearchTerm}
-                addToCart={addToCart} // Pasar la función al componente Productos
+                addToCart={addToCart}
               />
             </section>
 
             <Routes>
-              {/* Ruta para la página de Checkout */}
-              <Route path="/checkout" element={<Checkout />} /> {/* Asegúrate de que la ruta sea correcta */}
+              {/* Ruta para la página de inicio */}
+              <Route path="/" element={<HeroSection />} />
             </Routes>
           </main>
 
           <Footer />
         </div>
 
-        {/* Sidebar del carrito */}
+        {/* Sidebar */}
         <Sidebar
           cart={cart}
           isOpen={isSidebarOpen}
           setIsSidebarOpen={setIsSidebarOpen}
-          removeFromCart={removeFromCart} // Pasar la función para eliminar productos
+          removeFromCart={removeFromCart}
+        />
+
+        {/* Modal de Checkout */}
+        <CheckoutModal
+          isOpen={isCheckoutOpen}
+          closeModal={() => setCheckoutOpen(false)}
+          cart={cart}
         />
       </Router>
     </LenguajeProvider>
