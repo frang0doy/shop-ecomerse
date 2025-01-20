@@ -1,55 +1,25 @@
-import React, { useState, useEffect } from "react";
-import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
-import { useLanguage } from './LenguajeContext'; // Importa el hook para manejar el lenguaje
+import React, { useState, useEffect } from 'react';
+import { ShoppingCartIcon } from '@heroicons/react/24/outline';
+import { useLanguage } from './LenguajeContext'; // Contexto de idioma
 
-// Componente de alerta
-function Alerta({ mensaje, onClose }) {
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    if (mensaje) {
-      setVisible(true);
-      const timer = setTimeout(() => {
-        setVisible(false);
-        onClose(); // Cierra la alerta después de 3 segundos
-      }, 3000); // La alerta se cierra después de 3 segundos
-
-      return () => clearTimeout(timer);
-    }
-  }, [mensaje, onClose]);
-
-  if (!visible) return null;
-
-  return (
-    <div className="fixed top-0 left-1/2 transform -translate-x-1/2 z-50 w-96 p-4 bg-green-500 text-white rounded-lg shadow-lg flex items-center justify-between space-x-4">
-      <span className="flex-1 text-center">{mensaje}</span>
-      <button onClick={() => setVisible(false)} className="text-white">
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-        </svg>
-      </button>
-    </div>
-  );
-}
-
-export default function Header() {
+export default function Header({ cart, setIsSidebarOpen }) {
   const [scrolling, setScrolling] = useState(0);
-  const [bgColor, setBgColor] = useState("transparent");
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { language, toggleLanguage } = useLanguage(); // Usa el contexto de lenguaje
+  const [bgColor, setBgColor] = useState('transparent');
+  const [showCartDropdown, setShowCartDropdown] = useState(false);
+  const { language, toggleLanguage } = useLanguage();
 
   useEffect(() => {
     const handleScroll = () => {
       const scrollPosition = window.scrollY;
       const opacity = Math.min(scrollPosition / 300, 1);
       setScrolling(opacity);
-      setBgColor(scrollPosition > window.innerHeight * 0.6 ? "bg-black" : "transparent");
+      setBgColor(scrollPosition > window.innerHeight * 0.6 ? 'bg-black' : 'transparent');
     };
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener('scroll', handleScroll);
 
     return () => {
-      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener('scroll', handleScroll);
     };
   }, []);
 
@@ -57,13 +27,9 @@ export default function Header() {
     <header
       className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ease-in-out ${bgColor}`}
       style={{
-        boxShadow: scrolling > 0 ? "0px 4px 6px rgba(0, 0, 0, 0.1)" : "none",
+        boxShadow: scrolling > 0 ? '0px 4px 6px rgba(0, 0, 0, 0.1)' : 'none',
       }}
     >
-      {/* Alerta */}
-      {/* Puedes usar la alerta aquí si es necesario */}
-      {/* <Alerta mensaje={mensaje} onClose={() => setMensaje(null)} /> */}
-
       <nav className="mx-auto flex items-center justify-between p-6 lg:px-8">
         {/* Logo */}
         <div className="flex flex-shrink-0">
@@ -73,45 +39,49 @@ export default function Header() {
           </a>
         </div>
 
-        {/* Botón de cambio de idioma */}
-        <button
-          onClick={toggleLanguage}
-          className="text-white text-sm font-semibold py-2 px-4 cursor-pointer hover:text-indigo-600 transition-all"
-        >
-          {language === "es" ? "EN" : "ES"}
-        </button>
-
-        {/* Menú móvil */}
-        <div className="lg:hidden">
+        {/* Íconos alineados a la derecha */}
+        <div className="flex items-center space-x-4">
+          {/* Botón de cambio de idioma */}
           <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="text-white p-2"
+            onClick={toggleLanguage}
+            className="text-white text-sm font-semibold py-2 px-4 cursor-pointer hover:text-indigo-600 transition-all"
           >
-            <Bars3Icon className="h-6 w-6" />
+            {language === 'es' ? 'EN' : 'ES'}
           </button>
 
-          {mobileMenuOpen && (
-            <>
-              <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-md z-40"></div>
-              <div
-                className={`fixed top-0 right-0 w-[300px] h-full bg-black text-white p-6 z-50 transform transition-transform duration-300 ease-in-out ${
-                  mobileMenuOpen ? "translate-x-0" : "translate-x-full"
-                }`}
-              >
-                <div className="flex items-center justify-between mb-6">
-                  <a href="#" className="-m-1.5 p-1.5">
-                    <img alt="Logo" src="/logo512.png" className="h-8 w-auto" />
-                  </a>
-                  <button
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="text-white p-2"
-                  >
-                    <XMarkIcon className="h-6 w-6" />
-                  </button>
-                </div>
+          {/* Icono del carrito */}
+          <div className="relative">
+            <button
+              onClick={() => setIsSidebarOpen(true)} // Aquí se llama la función que se pasó como prop
+              className="text-white flex items-center"
+            >
+              <ShoppingCartIcon className="h-6 w-6" />
+              {cart.length > 0 && (
+                <span className="ml-2 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                  {cart.length}
+                </span>
+              )}
+            </button>
+
+            {/* Dropdown del carrito */}
+            {showCartDropdown && (
+              <div className="absolute right-0 mt-2 w-72 bg-white rounded-lg shadow-lg p-4 z-50">
+                <h3 className="font-bold text-lg">Tu carrito</h3>
+                {cart.length > 0 ? (
+                  <ul className="mt-2">
+                    {cart.map((item, index) => (
+                      <li key={index} className="flex justify-between items-center mb-2">
+                        <span>{item.name}</span>
+                        <span className="text-sm text-gray-500">${item.price}</span>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="text-gray-500">Tu carrito está vacío</p>
+                )}
               </div>
-            </>
-          )}
+            )}
+          </div>
         </div>
       </nav>
     </header>
