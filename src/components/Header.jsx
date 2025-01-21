@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ShoppingCartIcon } from '@heroicons/react/24/outline';
+import { ShoppingCartIcon } from '@heroicons/react/outline';
 import { useLanguage } from './LenguajeContext'; // Contexto de idioma
 
 export default function Header({ cart, setIsSidebarOpen }) {

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronDownIcon } from '@heroicons/react/24/outline'; // Asegúrate de tener el ícono correcto
+import { ChevronDownIcon } from '@heroicons/react/outline';// Asegúrate de tener el ícono correcto
 import { useLanguage } from './LenguajeContext'; // Asegúrate de que este archivo existe y tiene el contexto de idioma
 
 export default function HeroSection() {
