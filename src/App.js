@@ -50,9 +50,9 @@ function App() {
             <Header cart={cart} setIsSidebarOpen={setIsSidebarOpen} />
           </header>
 
-          <HeroSection />
-
           <main className="flex-grow">
+            {/* Siempre muestra HeroSection y Productos en la página principal */}
+            <HeroSection />
             <section id="productos">
               <Productos
                 searchTerm={searchTerm}
@@ -62,8 +62,8 @@ function App() {
             </section>
 
             <Routes>
-              {/* Ruta para la página de inicio */}
-              <Route path="/" element={<HeroSection />} />
+              {/* Ruta adicional para expandir en el futuro */}
+              <Route path="/checkout" element={<CheckoutModal />} />
             </Routes>
           </main>
 

@@ -1,26 +1,43 @@
 import React, { useState } from 'react';
 import { ChevronDownIcon } from '@heroicons/react/outline';
 import { Popover } from '@headlessui/react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Productos = ({ searchTerm, setSearchTerm, addToCart }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [filteredType, setFilteredType] = useState('Productos');
-  const productTypes = ['Sistemas Solares', 'Áticos', 'Inversores Solares', 'Linternas Solares'];
+  const [filteredType, setFilteredType] = useState('Ver todo');
+  const productTypes = [
+    'Sistemas Solares',
+    'Áticos',
+    'Inversores Solares',
+    'Linternas Solares',
+  ];
 
   const [products, setProducts] = useState([
-    { id: 1, name: 'Producto 1', price: 20.99, category: 'Productos', img: '/img/producto1.jpg', link: '/producto1' },
-    { id: 2, name: 'Producto 2', price: 15.99, category: 'Productos', img: '/img/producto2.jpg', link: '/producto2' },
-    { id: 3, name: 'Sistema Solar 1', price: 100.99, category: 'Sistemas Solares', img: '/img/sistemasolar1.jpg', link: '/sistemasolar1' },
-    { id: 4, name: 'Ático Solar 1', price: 150.99, category: 'Áticos', img: '/img/atico1.jpg', link: '/atico1' },
-    { id: 5, name: 'Inversor Solar 1', price: 200.99, category: 'Inversores Solares', img: '/img/inversor1.jpg', link: '/inversor1' },
-    { id: 6, name: 'Linterna Solar 1', price: 50.99, category: 'Linternas Solares', img: '/img/linterna1.jpg', link: '/linterna1' },
-    { id: 7, name: 'Producto 3', price: 20.99, category: 'Productos', img: '/img/producto3.jpg', link: '/producto3' },
-    { id: 8, name: 'Producto 4', price: 25.99, category: 'Productos', img: '/img/producto4.jpg', link: '/producto4' },
+    { id: 1, name: 'D10', price: 20.99, category: 'Sistemas Solares', characteristic: 'Popular', img: 'https://www.dlight.com/_next/image?url=%2Fnew%2Fimages%2Fproducts%2Fd10%2Fd10-1-1.png&w=1080&q=75', link: '/producto1' },
+    { id: 2, name: 'D100', price: 15.99, category: 'Sistemas Solares', characteristic: 'Económico', img: 'https://www.dlight.com/_next/image?url=%2Fnew%2Fimages%2Fproducts%2Fd100%2Fd100-1.png&w=1080&q=75', link: '/producto2' },
+    { id: 3, name: 'D200', price: 100.99, category: 'Sistemas Solares', characteristic: 'Ecológico', img: 'https://www.dlight.com/_next/image?url=%2Fnew%2Fimages%2Fproducts%2Fd200%2Fd200-1.png&w=256&q=75', link: '/sistemasolar1' },
+    { id: 4, name: 'X100Pro', price: 150.99, category: 'Sistemas Solares', characteristic: 'Moderno', img: 'https://www.dlight.com/_next/image?url=%2Fnew%2Fimages%2Fproducts%2Fx1000%2Fx1000-1.png&w=256&q=75', link: '/atico1' },
+    { id: 5, name: 'X200Pro', price: 200.99, category: 'Sistemas Solares', characteristic: 'Duradero', img: 'https://www.dlight.com/_next/image?url=%2Fnew%2Fimages%2Fproducts%2Fx2000%2Fx2000-1.png&w=256&q=75', link: '/inversor1' },
+    { id: 6, name: 'X300Pro', price: 50.99, category: 'Sistemas Solares', characteristic: 'Compacta', img: 'https://www.dlight.com/_next/image?url=%2Fnew%2Fimages%2Fproducts%2Fx3000%2Fx3000-1.png&w=256&q=75', link: '/linterna1' },
+    { id: 7, name: 'i Max10 Pro', price: 20.99, category: 'Inversores Solares', characteristic: 'Innovador', img: 'https://www.dlight.com/_next/image?url=%2Fnew%2Fimages%2Fproducts%2Fimax10%2Fimax10-1.jpg&w=640&q=75', link: '/producto3' },
+    { id: 8, name: 'SF 40', price: 25.99, category: 'Áticos', characteristic: 'Compacto', img: 'https://www.dlight.com/_next/image?url=%2Fnew%2Fimages%2Fproducts%2Fsf40%2Fsf40-1.png&w=1080&q=75', link: '/producto4' },
+    { id: 9, name: 'SF 50', price: 29.99, category: 'Áticos', characteristic: 'Fácil de usar', img: 'https://www.dlight.com/_next/image?url=%2Fnew%2Fimages%2Fproducts%2Fsf50%2Fsf50-1.png&w=1080&q=75', link: '/producto5' },
+    { id: 10, name: 'A2', price: 110.99, category: 'Linternas Solares', characteristic: 'Eficiente', img: 'https://www.dlight.com/_next/image?url=%2Fnew%2Fimages%2Fproducts%2Fa2%2Fa2-1.jpg&w=640&q=75', link: '/sistemasolar2' },
+    { id: 11, name: 'S3', price: 160.99, category: 'Linternas Solares', characteristic: 'Espacioso', img: 'https://www.dlight.com/_next/image?url=%2Fnew%2Fimages%2Fproducts%2Fs3%2Fs3-1.jpg&w=640&q=75', link: '/atico2' },
+    { id: 12, name: 'S30', price: 210.99, category: 'Linternas Solares', characteristic: 'Potente', img: 'https://www.dlight.com/_next/image?url=%2Fnew%2Fimages%2Fproducts%2Fs30%2Fs30-1.jpg&w=640&q=75', link: '/inversor2' },
+    { id: 13, name: 'S200', price: 60.99, category: 'Linternas Solares', characteristic: 'Ligera', img: 'https://www.dlight.com/_next/image?url=%2Fnew%2Fimages%2Fproducts%2Fs200%2Fs200-1.png&w=640&q=75', link: '/linterna2' },
+    { id: 14, name: 'S610', price: 35.99, category: 'Linternas Solares', characteristic: 'Resistente', img: 'https://www.dlight.com/_next/image?url=%2Fnew%2Fimages%2Fproducts%2Fs610%2Fs610-2.png&w=640&q=75', link: '/producto6' },
+    { id: 15, name: 'T200', price: 40.99, category: 'Linternas Solares', characteristic: 'Económico', img: 'https://www.dlight.com/_next/image?url=%2Fnew%2Fimages%2Fproducts%2Ft200%2Ft200-1.png&w=640&q=75', link: '/producto7' },
+    { id: 16, name: 'T200R', price: 45.99, category: 'Linternas Solares', characteristic: 'Diseño único', img: 'https://www.dlight.com/_next/image?url=%2Fnew%2Fimages%2Fproducts%2Ft200r%2Ft200r-1.png&w=640&q=75', link: '/producto8' },
+    { id: 17, name: 'T500R', price: 50.99, category: 'Linternas Solares', characteristic: 'Versátil', img: 'https://www.dlight.com/_next/image?url=%2Fnew%2Fimages%2Fproducts%2Ft500r%2Ft500r-1.jpg&w=640&q=75', link: '/producto9' },
+    
   ]);
 
-  const filteredProducts = products.filter(product =>
-    (product.name.toLowerCase().includes(searchTerm.toLowerCase())) &&
-    (filteredType === 'Ver todo' || product.category === filteredType)
+  const filteredProducts = products.filter((product) =>
+    (filteredType === 'Ver todo' || product.category === filteredType) &&
+    product.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const handleFilterChange = (type) => {
@@ -35,7 +52,18 @@ const Productos = ({ searchTerm, setSearchTerm, addToCart }) => {
 
   const handleAddToCart = (product) => {
     addToCart(product);
-    alert(`El producto ${product.name} ha sido agregado al carrito.`);
+
+    // Mostrar el toast con un mensaje personalizado
+    toast.success(`${product.name} agregado al carrito con éxito!`, {
+      position: 'top-right',
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: 'light',
+    });
   };
 
   return (
@@ -51,16 +79,23 @@ const Productos = ({ searchTerm, setSearchTerm, addToCart }) => {
               <ChevronDownIcon className="h-5 w-5 text-black transition-transform duration-200" aria-hidden="true" />
             </Popover.Button>
             {isOpen && (
-              <Popover.Panel className="absolute -left-2 top-full z-10 mt-3 inline-block overflow-hidden rounded-4xl bg-white shadow-lg ring-1 ring-gray-900/5 min-w-[280px]">
+              <Popover.Panel className="absolute -left-2 top-full z-10 mt-3 overflow-hidden rounded-4xl bg-white shadow-lg ring-1 ring-gray-900/5 min-w-[280px]">
                 <div className="p-4">
                   {productTypes.map((type) => (
-                    <div key={type} onClick={() => handleFilterChange(type)} className="group relative flex items-center gap-x-6 rounded-lg p-2 text-sm hover:bg-gray-50 cursor-pointer">
+                    <div
+                      key={type}
+                      onClick={() => handleFilterChange(type)}
+                      className="group relative flex items-center gap-x-6 rounded-lg p-2 text-sm hover:bg-gray-50 cursor-pointer"
+                    >
                       <div className="flex-auto">
                         <span className="block font-semibold text-gray-900">{type}</span>
                       </div>
                     </div>
                   ))}
-                  <div onClick={() => handleFilterChange('Productos')} className="group relative flex items-center gap-x-6 rounded-lg p-2 text-sm hover:bg-gray-50 cursor-pointer">
+                  <div
+                    onClick={() => handleFilterChange('Ver todo')}
+                    className="group relative flex items-center gap-x-6 rounded-lg p-2 text-sm hover:bg-gray-50 cursor-pointer"
+                  >
                     <div className="flex-auto">
                       <span className="block font-semibold text-gray-900">Ver todos los productos</span>
                     </div>
@@ -70,15 +105,13 @@ const Productos = ({ searchTerm, setSearchTerm, addToCart }) => {
             )}
           </Popover>
 
-          <div className="flex items-center gap-4">
-            <input
-              type="text"
-              placeholder="Buscar productos..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="p-3 w-full sm:w-auto border border-gray-300 rounded-lg shadow-lg text-sm hover:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-            />
-          </div>
+          <input
+            type="text"
+            placeholder="Buscar productos..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="p-3 w-full sm:w-auto border border-gray-300 rounded-lg shadow-lg text-sm hover:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+          />
         </div>
 
         {rows.map((row, index) => (
@@ -93,15 +126,18 @@ const Productos = ({ searchTerm, setSearchTerm, addToCart }) => {
                   <span className="text-gray-500 text-sm mb-4">${product.price}</span>
                   <button
                     onClick={() => handleAddToCart(product)}
-                    className="mb-4 p-3 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-all"
+                    className="w-full mt-4 bg-black text-white px-6 py-2 rounded-md shadow-lg hover:bg-gray-800"
                   >
-                    Agregar al carrito
+                    Añadir al carrito
                   </button>
                 </div>
               </div>
             ))}
           </div>
         ))}
+
+        {/* Contenedor para los Toasts */}
+        <ToastContainer />
       </div>
     </section>
   );
