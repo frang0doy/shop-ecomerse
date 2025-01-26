@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom'; // Usamos useNavigate para manejar la navegación
 
 function Carrito() {
   const [carrito, setCarrito] = useState([]);
+  const navigate = useNavigate(); // Usamos useNavigate
 
   useEffect(() => {
     const storedCarrito = JSON.parse(localStorage.getItem('carrito')) || [];
@@ -11,6 +12,12 @@ function Carrito() {
 
   const calcularTotal = () => {
     return carrito.reduce((total, item) => total + item.precio, 0);
+  };
+
+  const handleFinalizarCompra = () => {
+    if (carrito.length > 0) {
+      navigate('/checkout'); // Redirige a la página de checkout
+    }
   };
 
   return (
@@ -31,9 +38,12 @@ function Carrito() {
         <h3>Total: {calcularTotal()}€</h3>
       </div>
 
-      <Link to="/checkout">
-        <button>Finalizar Compra</button>
-      </Link>
+      <button 
+        onClick={handleFinalizarCompra} 
+        disabled={carrito.length === 0} // Deshabilita el botón si el carrito está vacío
+      >
+        Finalizar Compra
+      </button>
     </div>
   );
 }

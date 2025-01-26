@@ -52,8 +52,6 @@ const Productos = ({ searchTerm, setSearchTerm, addToCart }) => {
 
   const handleAddToCart = (product) => {
     addToCart(product);
-
-    // Mostrar el toast con un mensaje personalizado
     toast.success(`${product.name} agregado al carrito con éxito!`, {
       position: 'top-right',
       autoClose: 3000,
@@ -63,7 +61,11 @@ const Productos = ({ searchTerm, setSearchTerm, addToCart }) => {
       draggable: true,
       progress: undefined,
       theme: 'light',
+      
     });
+    
+    
+    
   };
 
   return (

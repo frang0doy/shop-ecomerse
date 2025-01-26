@@ -33,7 +33,7 @@ export default function Header({ cart, setIsSidebarOpen }) {
       <nav className="mx-auto flex items-center justify-between p-6 lg:px-8">
         {/* Logo */}
         <div className="flex flex-shrink-0">
-          <a href="#" className="-m-1.5 p-1.5">
+          <a href="https://proto-nature.vercel.app/" className="-m-1.5 p-1.5">
             <span className="sr-only">Logo</span>
             <img alt="Logo" src="/logo512.png" className="h-8 w-auto" />
           </a>
