@@ -1,16 +1,16 @@
-import React, { useState } from 'react';
-import CheckoutModal from './CheckoutModal';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Sidebar = ({ cart, isOpen, setIsSidebarOpen, removeFromCart }) => {
-  const [isCheckoutOpen, setCheckoutOpen] = useState(false);
-
-  const openCheckout = () => {
-    setCheckoutOpen(true);
-    setIsSidebarOpen(false);
-  };
+  const navigate = useNavigate();
 
   const closeSidebar = () => {
     setIsSidebarOpen(false);
+  };
+
+  const goToCheckout = () => {
+    setIsSidebarOpen(false); // Cierra el sidebar antes de navegar
+    navigate('/checkout');   // Redirige a la página de checkout
   };
 
   const subtotal = cart.reduce((total, product) => total + product.price * product.quantity, 0);
@@ -67,7 +67,7 @@ const Sidebar = ({ cart, isOpen, setIsSidebarOpen, removeFromCart }) => {
               <p className="mb-4">Total: ${total.toFixed(2)}</p>
             </div>
             <button
-              onClick={openCheckout}
+              onClick={goToCheckout}
               className="w-full bg-black text-white p-2 rounded-md hover:bg-rose-700 transition-all"
             >
               Finalizar compra
@@ -75,9 +75,6 @@ const Sidebar = ({ cart, isOpen, setIsSidebarOpen, removeFromCart }) => {
           </div>
         </div>
       </div>
-
-      {/* Modal de Checkout */}
-      <CheckoutModal isOpen={isCheckoutOpen} closeModal={() => setCheckoutOpen(false)} cart={cart} />
     </>
   );
 };

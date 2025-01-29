@@ -7,14 +7,13 @@ import Productos from './components/Productos';
 import Sidebar from './components/Sidebar';
 import { LenguajeProvider } from './components/LenguajeContext';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import CheckoutPage from './components/CheckoutPage'; // Nueva página de checkout
 
-import CheckoutModal from './components/CheckoutModal'; // Modal
 
 function App() {
   const [searchTerm, setSearchTerm] = useState(""); // Estado para el término de búsqueda
   const [cart, setCart] = useState([]); // Estado para el carrito
   const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Estado para mostrar/ocultar la barra lateral
-  const [isCheckoutOpen, setCheckoutOpen] = useState(false); // Estado para mostrar/ocultar el modal de checkout
 
   const addToCart = (product) => {
     setCart((prevCart) => {
@@ -51,19 +50,23 @@ function App() {
           </header>
 
           <main className="flex-grow">
-            {/* Siempre muestra HeroSection y Productos en la página principal */}
-            <HeroSection />
-            <section id="productos">
-              <Productos
-                searchTerm={searchTerm}
-                setSearchTerm={setSearchTerm}
-                addToCart={addToCart}
-              />
-            </section>
-
             <Routes>
-              {/* Ruta adicional para expandir en el futuro */}
-              <Route path="/checkout" element={<CheckoutModal />} />
+              <Route
+                path="/"
+                element={
+                  <>
+                    <HeroSection />
+                    <section id="productos">
+                      <Productos
+                        searchTerm={searchTerm}
+                        setSearchTerm={setSearchTerm}
+                        addToCart={addToCart}
+                      />
+                    </section>
+                  </>
+                }
+              />
+              <Route path="/checkout" element={<CheckoutPage cart={cart} />} />
             </Routes>
           </main>
 
@@ -76,13 +79,6 @@ function App() {
           isOpen={isSidebarOpen}
           setIsSidebarOpen={setIsSidebarOpen}
           removeFromCart={removeFromCart}
-        />
-
-        {/* Modal de Checkout */}
-        <CheckoutModal
-          isOpen={isCheckoutOpen}
-          closeModal={() => setCheckoutOpen(false)}
-          cart={cart}
         />
       </Router>
     </LenguajeProvider>
