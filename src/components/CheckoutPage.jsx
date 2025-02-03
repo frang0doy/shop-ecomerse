@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';  // Si estás usando react-router para la navegación
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { PencilIcon } from '@heroicons/react/outline';
 
 const CheckoutPage = ({ cart }) => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -83,137 +84,160 @@ const CheckoutPage = ({ cart }) => {
           <div className="w-2/3 pr-6">
             {/* Paso 1: Datos Personales */}
             <div className="mb-8 border p-6 rounded-lg bg-white shadow-md">
-              <div className="flex justify-between items-center">
-                <h3 className="text-xl font-semibold text-gray-700">1: Datos Personales</h3>
-                {currentStep > 1 && (
-                  <button
-                    onClick={() => setCurrentStep(1)}
-                    className="text-black underline decoration-1"
-                  >
-                    Editar
-                  </button>
-                )}
-              </div>
-              {currentStep === 1 && (
-                <div className="mt-6 space-y-4">
-                  <input
-                    type="text"
-                    name="firstName"
-                    placeholder="Nombre"
-                    value={formData.personalInfo.firstName}
-                    onChange={(e) => handleInputChange(e, 'personalInfo')}
-                    className="block w-full p-4 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                  />
-                  <input
-                    type="text"
-                    name="lastName"
-                    placeholder="Apellido"
-                    value={formData.personalInfo.lastName}
-                    onChange={(e) => handleInputChange(e, 'personalInfo')}
-                    className="block w-full p-4 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                  />
-                  <input
-                    type="email"
-                    name="email"
-                    placeholder="Correo Electrónico"
-                    value={formData.personalInfo.email}
-                    onChange={(e) => handleInputChange(e, 'personalInfo')}
-                    className="block w-full p-4 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                  />
-                  <input
-                    type="tel"
-                    name="phone"
-                    placeholder="Teléfono"
-                    value={formData.personalInfo.phone}
-                    onChange={(e) => handleInputChange(e, 'personalInfo')}
-                    className="block w-full p-4 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                  />
-                  <button
-                    onClick={handleNextStep}
-                    disabled={!isStepCompleted(1)}
-                    className={`w-full p-4 bg-black text-white rounded-lg hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 ${!isStepCompleted(1) && 'opacity-50 cursor-not-allowed'}`}
-                  >
-                    Continuar
-                  </button>
-                </div>
-              )}
-            </div>
+  <div className="flex justify-between items-center">
+    <h3 className="text-xl font-semibold text-gray-700">1: Datos Personales</h3>
+    {currentStep > 1 && (
+      <>
+        {/* Ícono de editar en pantallas pequeñas */}
+        <button
+          onClick={() => setCurrentStep(1)}
+          className="text-black sm:hidden p-2"
+        >
+          <PencilIcon className="h-5 w-5" />
+        </button>
+        
+        {/* Texto "Editar" en pantallas grandes */}
+        <button
+          onClick={() => setCurrentStep(1)}
+          className="text-black underline decoration-1 hidden sm:block"
+        >
+          Editar
+        </button>
+      </>
+    )}
+  </div>
+  {currentStep === 1 && (
+    <div className="mt-6 space-y-4">
+      <input
+        type="text"
+        name="firstName"
+        placeholder="Nombre"
+        value={formData.personalInfo.firstName}
+        onChange={(e) => handleInputChange(e, 'personalInfo')}
+        className="block w-full p-4 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+      />
+      <input
+        type="text"
+        name="lastName"
+        placeholder="Apellido"
+        value={formData.personalInfo.lastName}
+        onChange={(e) => handleInputChange(e, 'personalInfo')}
+        className="block w-full p-4 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+      />
+      <input
+        type="email"
+        name="email"
+        placeholder="Correo Electrónico"
+        value={formData.personalInfo.email}
+        onChange={(e) => handleInputChange(e, 'personalInfo')}
+        className="block w-full p-4 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+      />
+      <input
+        type="tel"
+        name="phone"
+        placeholder="Teléfono"
+        value={formData.personalInfo.phone}
+        onChange={(e) => handleInputChange(e, 'personalInfo')}
+        className="block w-full p-4 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+      />
+      <button
+        onClick={handleNextStep}
+        disabled={!isStepCompleted(1)}
+        className={`w-full p-4 bg-black text-white rounded-lg hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 ${!isStepCompleted(1) && 'opacity-50 cursor-not-allowed'}`}
+      >
+        Continuar
+      </button>
+    </div>
+  )}
+</div>
 
             {/* Paso 2: Dirección de Envío */}
-            <div className="mb-8 border p-6 rounded-lg bg-white shadow-md">
-              <div className="flex justify-between items-center">
-                <h3 className="text-xl font-semibold text-gray-700">2: Dirección de Envío</h3>
-                {currentStep > 2 && (
-                  <button
-                    onClick={() => setCurrentStep(2)}
-                    className="text-black underline decoration-1"
-                  >
-                    Editar
-                  </button>
-                )}
-              </div>
-              {currentStep === 2 && (
-                <div className="mt-6 space-y-4">
-                  <input
-                    type="text"
-                    name="address"
-                    placeholder="Dirección"
-                    value={formData.shipping.address}
-                    onChange={(e) => handleInputChange(e, 'shipping')}
-                    className="block w-full p-4 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                  />
-                  <input
-                    type="text"
-                    name="number"
-                    placeholder="Número"
-                    value={formData.shipping.number}
-                    onChange={(e) => handleInputChange(e, 'shipping')}
-                    className="block w-full p-4 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                  />
-                  <input
-                    type="text"
-                    name="postalCode"
-                    placeholder="Código Postal"
-                    value={formData.shipping.postalCode}
-                    onChange={(e) => handleInputChange(e, 'shipping')}
-                    className="block w-full p-4 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                  />
-                  <input
-                    type="text"
-                    name="city"
-                    placeholder="Ciudad"
-                    value={formData.shipping.city}
-                    onChange={(e) => handleInputChange(e, 'shipping')}
-                    className="block w-full p-4 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                  />
-                  <input
-                    type="text"
-                    name="province"
-                    placeholder="Provincia"
-                    value={formData.shipping.province}
-                    onChange={(e) => handleInputChange(e, 'shipping')}
-                    className="block w-full p-4 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                  />
-                  <button
-                    onClick={handleNextStep}
-                    disabled={!isStepCompleted(2)}
-                    className={`w-full p-4 bg-black text-white rounded-lg hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 ${!isStepCompleted(2) && 'opacity-50 cursor-not-allowed'}`}
-                  >
-                    Continuar
-                  </button>
-                </div>
-              )}
-            </div>
+           
+<div className="mb-8 border p-6 rounded-lg bg-white shadow-md">
+  <div className="flex justify-between items-center">
+    <h3 className="text-xl font-semibold text-gray-700">2: Dirección de Envío</h3>
+    {currentStep > 2 && (
+      <>
+        {/* Ícono de editar en pantallas pequeñas */}
+        <button
+          onClick={() => setCurrentStep(2)}
+          className="text-black sm:hidden p-2"
+        >
+          <PencilIcon className="h-5 w-5" />
+        </button>
+        
+        {/* Texto "Editar" en pantallas grandes */}
+        <button
+          onClick={() => setCurrentStep(2)}
+          className="text-black underline decoration-1 hidden sm:block"
+        >
+          Editar
+        </button>
+      </>
+    )}
+  </div>
+  {currentStep === 2 && (
+    <div className="mt-6 space-y-4">
+      <input
+        type="text"
+        name="address"
+        placeholder="Dirección"
+        value={formData.shipping.address}
+        onChange={(e) => handleInputChange(e, 'shipping')}
+        className="block w-full p-4 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+      />
+      <input
+        type="text"
+        name="number"
+        placeholder="Número"
+        value={formData.shipping.number}
+        onChange={(e) => handleInputChange(e, 'shipping')}
+        className="block w-full p-4 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+      />
+      <input
+        type="text"
+        name="postalCode"
+        placeholder="Código Postal"
+        value={formData.shipping.postalCode}
+        onChange={(e) => handleInputChange(e, 'shipping')}
+        className="block w-full p-4 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+      />
+      <input
+        type="text"
+        name="city"
+        placeholder="Ciudad"
+        value={formData.shipping.city}
+        onChange={(e) => handleInputChange(e, 'shipping')}
+        className="block w-full p-4 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+      />
+      <input
+        type="text"
+        name="province"
+        placeholder="Provincia"
+        value={formData.shipping.province}
+        onChange={(e) => handleInputChange(e, 'shipping')}
+        className="block w-full p-4 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+      />
+      <button
+        onClick={handleNextStep}
+        disabled={!isStepCompleted(2)}
+        className={`w-full p-4 bg-black text-white rounded-lg hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 ${!isStepCompleted(2) && 'opacity-50 cursor-not-allowed'}`}
+      >
+        Continuar
+      </button>
+    </div>
+  )}
+</div>
 
             {/* Paso 3: Método de Pago */}
             <div className="border p-6 rounded-lg bg-white shadow-md">
   <h3 className="text-xl font-semibold text-gray-700">3: Método de Pago</h3>
   
   {currentStep === 3 && !selectedPayment && (
-    <div className="mt-6 flex gap-6">
+    <div className="mt-6 flex flex-col sm:flex-row gap-6">
       <button
         onClick={() => setSelectedPayment("bank")}
-        className="w-full p-4 border border-gray-300 text-gray-700 rounded-lg 
+        className="w-full sm:w-auto p-4 border border-gray-300 text-gray-700 rounded-lg 
                    hover:shadow-md transition-all duration-300 hover:scale-105"
       >
         Depósito Bancario
@@ -223,7 +247,7 @@ const CheckoutPage = ({ cart }) => {
         href="https://www.mercadopago.com.ar/checkout/v1/redirect?pref_id=YOUR_PREF_ID"
         target="_blank"
         rel="noopener noreferrer"
-        className="w-full p-4 border border-gray-300 text-gray-700 rounded-lg 
+        className="w-full sm:w-auto p-4 border border-gray-300 text-gray-700 rounded-lg 
                    hover:shadow-md transition-all duration-300 hover:scale-105 
                    text-center flex items-center justify-center"
       >
@@ -238,7 +262,7 @@ const CheckoutPage = ({ cart }) => {
       <h4 className="text-lg font-semibold text-gray-700">Detalles de la cuenta</h4>
       <p className="mt-2 text-gray-600">Banco: Banco Ejemplo</p>
       <p className="text-gray-600">Cuenta: 123456789</p>
-      <p className="text-gray-600">CBU: 1234567890123456789012</p>
+      <p className="text-gray-600">CBU: 12345678901234</p>
       <p className="text-gray-600">Alias: ejemplo.alias</p>
       
       <button
@@ -251,17 +275,18 @@ const CheckoutPage = ({ cart }) => {
     </div>
   )}
 </div>
+
           </div>
 
           {/* Right: Cart */}
-          <div className="w-1/3 pl-6">
+          <div className="w-full sm:w-1/3 px-4 sm:px-6">
   <div className="p-6 border rounded-lg shadow-md bg-white">
     <h4 className="text-lg font-semibold text-gray-700 mb-4">Resumen de Compra</h4>
     
     {cart && cart.length > 0 ? (
       cart.map(item => (
         <div key={item.id} className="flex justify-between mb-4">
-          <span>{item.name} x {item.quantity}</span>
+          <span className="truncate">{item.name} x {item.quantity}</span>
           <span>${item.price * item.quantity}</span>
         </div>
       ))
