@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';  // Si estás usando react-router para 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { PencilIcon } from '@heroicons/react/outline';
-
 const CheckoutPage = ({ cart }) => {
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
@@ -45,11 +44,17 @@ const CheckoutPage = ({ cart }) => {
     setCurrentStep(prevStep => prevStep + 1);
   };
 
+  // Función de validación de correo (opcional)
+  const validateEmail = (email) => {
+    const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+    return emailPattern.test(email);
+  };
+
   // Verifica si el paso está completado
   const isStepCompleted = (step) => {
     if (step === 1) {
       const { firstName, lastName, email, phone } = formData.personalInfo;
-      return firstName && lastName && email && phone;
+      return firstName && lastName && email && phone && validateEmail(email); // Validar email
     }
     if (step === 2) {
       const { address, number, postalCode, city, province } = formData.shipping;
@@ -62,7 +67,6 @@ const CheckoutPage = ({ cart }) => {
   const handleFinalizarCompra = () => {
     alert('Compra finalizada');
   };
-
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
       {/* Header */}

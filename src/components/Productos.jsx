@@ -1,18 +1,11 @@
 import React, { useState } from 'react';
 import { ChevronDownIcon } from '@heroicons/react/outline';
-import { Popover } from '@headlessui/react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const Productos = ({ searchTerm, setSearchTerm, addToCart }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [filteredType, setFilteredType] = useState('Ver todo');
-  const productTypes = [
-    'Sistemas Solares',
-    'Áticos',
-    'Inversores Solares',
-    'Linternas Solares',
-  ];
+  const [sortOption, setSortOption] = useState('Filtrar por');
 
   const [products, setProducts] = useState([
     { id: 1, name: 'D10', price: 20.99, category: 'Sistemas Solares', characteristic: 'Popular', img: 'https://www.dlight.com/_next/image?url=%2Fnew%2Fimages%2Fproducts%2Fd10%2Fd10-1-1.png&w=1080&q=75', link: '/producto1' },
@@ -32,22 +25,28 @@ const Productos = ({ searchTerm, setSearchTerm, addToCart }) => {
     { id: 15, name: 'T200', price: 40.99, category: 'Linternas Solares', characteristic: 'Económico', img: 'https://www.dlight.com/_next/image?url=%2Fnew%2Fimages%2Fproducts%2Ft200%2Ft200-1.png&w=640&q=75', link: '/producto7' },
     { id: 16, name: 'T200R', price: 45.99, category: 'Linternas Solares', characteristic: 'Diseño único', img: 'https://www.dlight.com/_next/image?url=%2Fnew%2Fimages%2Fproducts%2Ft200r%2Ft200r-1.png&w=640&q=75', link: '/producto8' },
     { id: 17, name: 'T500R', price: 50.99, category: 'Linternas Solares', characteristic: 'Versátil', img: 'https://www.dlight.com/_next/image?url=%2Fnew%2Fimages%2Fproducts%2Ft500r%2Ft500r-1.jpg&w=640&q=75', link: '/producto9' },
-    
   ]);
 
-  const filteredProducts = products.filter((product) =>
-    (filteredType === 'Ver todo' || product.category === filteredType) &&
-    product.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // Ordenar productos basado en la opción seleccionada
+  const sortedProducts = [...products].sort((a, b) => {
+    if (sortOption === 'Mayor a menor') {
+      return b.price - a.price;
+    } else if (sortOption === 'Menor a mayor') {
+      return a.price - b.price;
+    } else if (sortOption === 'A-Z') {
+      return a.name.localeCompare(b.name);
+    }
+    return 0;
+  });
 
-  const handleFilterChange = (type) => {
-    setFilteredType(type);
+  const handleSortChange = (option) => {
+    setSortOption(option);
     setIsOpen(false);
   };
 
   const rows = [];
-  for (let i = 0; i < filteredProducts.length; i += 4) {
-    rows.push(filteredProducts.slice(i, i + 4));
+  for (let i = 0; i < sortedProducts.length; i += 4) {
+    rows.push(sortedProducts.slice(i, i + 4));
   }
 
   const handleAddToCart = (product) => {
@@ -61,51 +60,46 @@ const Productos = ({ searchTerm, setSearchTerm, addToCart }) => {
       draggable: true,
       progress: undefined,
       theme: 'light',
-      
     });
-    
-    
-    
   };
 
   return (
     <section id="productos" className="py-20 bg-gray-100">
       <div className="max-w-7xl mx-auto px-6">
         <div className="flex items-center justify-between mb-8 gap-8">
-          <Popover className="relative">
-            <Popover.Button
+          <div className="relative">
+            <button
               className="flex items-center gap-x-1 text-lg font-semibold text-black relative group px-4 py-2 bg-white border border-gray-300 rounded-md"
               onClick={() => setIsOpen(!isOpen)}
             >
-              {filteredType}
+              {sortOption}
               <ChevronDownIcon className="h-5 w-5 text-black transition-transform duration-200" aria-hidden="true" />
-            </Popover.Button>
+            </button>
             {isOpen && (
-              <Popover.Panel className="absolute -left-2 top-full z-10 mt-3 overflow-hidden rounded-4xl bg-white shadow-lg ring-1 ring-gray-900/5 min-w-[280px]">
+              <div className="absolute -left-2 top-full z-10 mt-3 overflow-hidden rounded-4xl bg-white shadow-lg ring-1 ring-gray-900/5 min-w-[280px]">
                 <div className="p-4">
-                  {productTypes.map((type) => (
-                    <div
-                      key={type}
-                      onClick={() => handleFilterChange(type)}
-                      className="group relative flex items-center gap-x-6 rounded-lg p-2 text-sm hover:bg-gray-50 cursor-pointer"
-                    >
-                      <div className="flex-auto">
-                        <span className="block font-semibold text-gray-900">{type}</span>
-                      </div>
-                    </div>
-                  ))}
                   <div
-                    onClick={() => handleFilterChange('Ver todo')}
+                    onClick={() => handleSortChange('Mayor a menor')}
                     className="group relative flex items-center gap-x-6 rounded-lg p-2 text-sm hover:bg-gray-50 cursor-pointer"
                   >
-                    <div className="flex-auto">
-                      <span className="block font-semibold text-gray-900">Ver todos los productos</span>
-                    </div>
+                    <span className="block font-semibold text-gray-900">Mayor a menor</span>
+                  </div>
+                  <div
+                    onClick={() => handleSortChange('Menor a mayor')}
+                    className="group relative flex items-center gap-x-6 rounded-lg p-2 text-sm hover:bg-gray-50 cursor-pointer"
+                  >
+                    <span className="block font-semibold text-gray-900">Menor a mayor</span>
+                  </div>
+                  <div
+                    onClick={() => handleSortChange('A-Z')}
+                    className="group relative flex items-center gap-x-6 rounded-lg p-2 text-sm hover:bg-gray-50 cursor-pointer"
+                  >
+                    <span className="block font-semibold text-gray-900">A-Z</span>
                   </div>
                 </div>
-              </Popover.Panel>
+              </div>
             )}
-          </Popover>
+          </div>
 
           <input
             type="text"
