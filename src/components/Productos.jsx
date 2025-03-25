@@ -2,10 +2,40 @@ import React, { useState } from 'react';
 import { ChevronDownIcon } from '@heroicons/react/outline';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useLanguage } from './LenguajeContext'; // Importar el hook del idioma
 
 const Productos = ({ searchTerm, setSearchTerm, addToCart }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [sortOption, setSortOption] = useState('Filtrar por');
+
+  // Obtener el idioma actual desde el hook useLanguage
+  const { language } = useLanguage();
+
+  // Definir las traducciones de los textos
+  const texts = {
+    es: {
+      sortOptions: {
+        default: 'Filtrar por',
+        highToLow: 'Mayor a menor',
+        lowToHigh: 'Menor a mayor',
+        aToZ: 'A-Z',
+      },
+      searchPlaceholder: 'Buscar productos...',
+      addToCart: 'Añadir al carrito',
+      cartSuccess: (productName) => `${productName} agregado al carrito con éxito!`,
+    },
+    en: {
+      sortOptions: {
+        default: 'Sort by',
+        highToLow: 'High to Low',
+        lowToHigh: 'Low to High',
+        aToZ: 'A-Z',
+      },
+      searchPlaceholder: 'Search products...',
+      addToCart: 'Add to cart',
+      cartSuccess: (productName) => `${productName} added to cart successfully!`,
+    },
+  };
 
   const [products, setProducts] = useState([
     { id: 1, name: 'D10', price: 20.99, category: 'Sistemas Solares', characteristic: 'Popular', img: 'https://www.dlight.com/_next/image?url=%2Fnew%2Fimages%2Fproducts%2Fd10%2Fd10-1-1.png&w=1080&q=75', link: '/producto1' },
@@ -29,11 +59,11 @@ const Productos = ({ searchTerm, setSearchTerm, addToCart }) => {
 
   // Ordenar productos basado en la opción seleccionada
   const sortedProducts = [...products].sort((a, b) => {
-    if (sortOption === 'Mayor a menor') {
+    if (sortOption === texts[language].sortOptions.highToLow) {
       return b.price - a.price;
-    } else if (sortOption === 'Menor a mayor') {
+    } else if (sortOption === texts[language].sortOptions.lowToHigh) {
       return a.price - b.price;
-    } else if (sortOption === 'A-Z') {
+    } else if (sortOption === texts[language].sortOptions.aToZ) {
       return a.name.localeCompare(b.name);
     }
     return 0;
@@ -51,7 +81,7 @@ const Productos = ({ searchTerm, setSearchTerm, addToCart }) => {
 
   const handleAddToCart = (product) => {
     addToCart(product);
-    toast.success(`${product.name} agregado al carrito con éxito!`, {
+    toast.success(texts[language].cartSuccess(product.name), {
       position: 'top-right',
       autoClose: 3000,
       hideProgressBar: false,
@@ -79,22 +109,22 @@ const Productos = ({ searchTerm, setSearchTerm, addToCart }) => {
               <div className="absolute -left-2 top-full z-10 mt-3 overflow-hidden rounded-4xl bg-white shadow-lg ring-1 ring-gray-900/5 min-w-[280px]">
                 <div className="p-4">
                   <div
-                    onClick={() => handleSortChange('Mayor a menor')}
+                    onClick={() => handleSortChange(texts[language].sortOptions.highToLow)}
                     className="group relative flex items-center gap-x-6 rounded-lg p-2 text-sm hover:bg-gray-50 cursor-pointer"
                   >
-                    <span className="block font-semibold text-gray-900">Mayor a menor</span>
+                    <span className="block font-semibold text-gray-900">{texts[language].sortOptions.highToLow}</span>
                   </div>
                   <div
-                    onClick={() => handleSortChange('Menor a mayor')}
+                    onClick={() => handleSortChange(texts[language].sortOptions.lowToHigh)}
                     className="group relative flex items-center gap-x-6 rounded-lg p-2 text-sm hover:bg-gray-50 cursor-pointer"
                   >
-                    <span className="block font-semibold text-gray-900">Menor a mayor</span>
+                    <span className="block font-semibold text-gray-900">{texts[language].sortOptions.lowToHigh}</span>
                   </div>
                   <div
-                    onClick={() => handleSortChange('A-Z')}
+                    onClick={() => handleSortChange(texts[language].sortOptions.aToZ)}
                     className="group relative flex items-center gap-x-6 rounded-lg p-2 text-sm hover:bg-gray-50 cursor-pointer"
                   >
-                    <span className="block font-semibold text-gray-900">A-Z</span>
+                    <span className="block font-semibold text-gray-900">{texts[language].sortOptions.aToZ}</span>
                   </div>
                 </div>
               </div>
@@ -103,7 +133,7 @@ const Productos = ({ searchTerm, setSearchTerm, addToCart }) => {
 
           <input
             type="text"
-            placeholder="Buscar productos..."
+            placeholder={texts[language].searchPlaceholder}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="p-3 w-full sm:w-auto border border-gray-300 rounded-lg shadow-lg text-sm hover:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
@@ -124,7 +154,7 @@ const Productos = ({ searchTerm, setSearchTerm, addToCart }) => {
                     onClick={() => handleAddToCart(product)}
                     className="w-full mt-4 bg-black text-white px-6 py-2 rounded-md shadow-lg hover:bg-gray-800"
                   >
-                    Añadir al carrito
+                    {texts[language].addToCart}
                   </button>
                 </div>
               </div>

@@ -1,20 +1,43 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useLanguage } from './LenguajeContext'; // Importar el hook de idioma
 
 const Sidebar = ({ cart, isOpen, setIsSidebarOpen, removeFromCart }) => {
   const navigate = useNavigate();
+  const { language } = useLanguage(); // Obtener el idioma actual
 
+  // Función para cerrar el sidebar
   const closeSidebar = () => {
     setIsSidebarOpen(false);
   };
 
+  // Función para redirigir al checkout
   const goToCheckout = () => {
     setIsSidebarOpen(false); // Cierra el sidebar antes de navegar
     navigate('/checkout');   // Redirige a la página de checkout
   };
 
+  // Calcular subtotal y total
   const subtotal = cart.reduce((total, product) => total + product.price * product.quantity, 0);
   const total = subtotal;
+
+  // Textos según el idioma
+  const texts = {
+    es: {
+      cartEmpty: 'Tu carrito está vacío',
+      remove: 'Eliminar',
+      subtotal: 'Subtotal',
+      total: 'Total',
+      checkout: 'Finalizar compra',
+    },
+    en: {
+      cartEmpty: 'Your cart is empty',
+      remove: 'Remove',
+      subtotal: 'Subtotal',
+      total: 'Total',
+      checkout: 'Checkout',
+    },
+  };
 
   return (
     <>
@@ -41,7 +64,7 @@ const Sidebar = ({ cart, isOpen, setIsSidebarOpen, removeFromCart }) => {
 
           <div className="mb-8">
             {cart.length === 0 ? (
-              <p className="text-center">Tu carrito está vacío</p>
+              <p className="text-center">{texts[language].cartEmpty}</p> // Texto que cambia según el idioma
             ) : (
               cart.map((product) => (
                 <div key={product.id} className="flex justify-between items-center mb-4">
@@ -53,7 +76,7 @@ const Sidebar = ({ cart, isOpen, setIsSidebarOpen, removeFromCart }) => {
                     onClick={() => removeFromCart(product)}
                     className="text-red-600 hover:text-red-800 transition-all"
                   >
-                    Eliminar
+                    {texts[language].remove} {/* Texto de eliminación dinámico */}
                   </button>
                 </div>
               ))
@@ -63,14 +86,18 @@ const Sidebar = ({ cart, isOpen, setIsSidebarOpen, removeFromCart }) => {
           <div className="absolute bottom-4 left-0 right-0 p-4">
             <hr className="mb-4" />
             <div className="text-lg font-semibold">
-              <p className="mb-2">Subtotal: ${subtotal.toFixed(2)}</p>
-              <p className="mb-4">Total: ${total.toFixed(2)}</p>
+              <p className="mb-2">
+                {texts[language].subtotal}: ${subtotal.toFixed(2)} {/* Subtotal dinámico */}
+              </p>
+              <p className="mb-4">
+                {texts[language].total}: ${total.toFixed(2)} {/* Total dinámico */}
+              </p>
             </div>
             <button
               onClick={goToCheckout}
               className="w-full bg-black text-white p-2 rounded-md hover:bg-rose-700 transition-all"
             >
-              Finalizar compra
+              {texts[language].checkout} {/* Botón de finalizar compra dinámico */}
             </button>
           </div>
         </div>

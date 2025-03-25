@@ -11,13 +11,13 @@ const Footer = () => {
     es: {
       newsletterTitle: 'Suscríbete a nuestro boletín de noticias',
       newsletterDesc: 'Obtenga las últimas actualizaciones y percepciones entregadas en su bandeja de entrada',
-      
+      newsletterButton: 'Enviar', // Agregar texto para el botón en español
       copyright: '© 2024 ProtoNature. Todos los derechos reservados.',
     },
     en: {
       newsletterTitle: 'Subscribe to our newsletter',
       newsletterDesc: 'Get the latest updates and insights delivered to your inbox',
-      
+      newsletterButton: 'Submit', // Agregar texto para el botón en inglés
       copyright: '© 2024 ProtoNature. All rights reserved.',
     },
   };
@@ -50,18 +50,13 @@ const Footer = () => {
                   <button
                     className="w-1/4 bg-gray-900 px-6 py-2 text-sm font-semibold text-white transition-none hover:bg-teal-600 border-2 border-white border-l-0 rounded-r-full"  // Botón más corto
                   >
-                    {texts[language].newsletterButton || 'Enviar'}
+                    {texts[language].newsletterButton} {/* Texto dinámico del botón */}
                   </button>
                 </div>
               </form>
             </div>
           </div>
         </div>
-
-        
-
-        
-        
       </div>
 
       {/* Línea divisora inferior con más separación */}
@@ -74,6 +69,6 @@ const Footer = () => {
       </div>
     </footer>
   );
-}
+};
 
 export default Footer;
