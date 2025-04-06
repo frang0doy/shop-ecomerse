@@ -85,7 +85,7 @@ export default function HeroSection() {
       <div className="absolute inset-0 flex justify-center items-center text-center text-white">
         <div>
           <h1
-            className="text-3xl font-extrabold sm:text-5xl lg:text-5xl"
+            className="text-3xl font-semibold sm:text-5xl lg:text-5xl"
             style={window.innerWidth < 640 ? mobileTextStyle : textStyle}
           >
             {language === 'es' ? texts.heading.es : texts.heading.en}
